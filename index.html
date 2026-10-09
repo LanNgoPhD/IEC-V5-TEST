@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="referrer" content="no-referrer"><title>IEC V5.0 – M4 Test</title>
+<meta name="referrer" content="no-referrer"><title>IEC V5.0 – M5-H Web Test</title>
 <style>
 :root{color-scheme:light;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--bg:#f4f6fb;--ink:#17233c;--mute:#66738a;--line:#dfe5ef;--primary:#315ac7;--blue:#dbeafe;--red:#fff2f2;--green:#eefcf3;--yellow:#fff7de}
 *{box-sizing:border-box}body{background:var(--bg);color:var(--ink);margin:0}main{max-width:1040px;margin:auto;padding:20px}h1{font-size:1.55rem;margin:.2em 0}.sub{color:var(--mute);font-size:.9rem}.panel{background:white;border:1px solid var(--line);padding:18px;border-radius:14px;margin:14px 0;box-shadow:0 3px 20px #17233c08}label{font-size:.85rem;font-weight:650;display:block;margin-bottom:5px}input{font:inherit;width:100%;padding:12px;border:1px solid #cbd4e0;border-radius:9px;min-height:43px}input:focus{outline:2px solid #9bb6ff}button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 18px;background:var(--primary);color:white;font-weight:700;min-height:43px}button:disabled{opacity:.55;cursor:wait}button.secondary{color:var(--primary);background:#eaf0ff}.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.wide{grid-column:1/-1}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.status{padding:10px 12px;background:#f4f7ff;border-radius:9px;white-space:pre-wrap;word-break:break-word}.error{background:var(--red);color:#9d1f27}.success{background:var(--green);color:#17643b}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.metric{background:#f8fafe;border:1px solid var(--line);border-radius:10px;padding:12px}.metric b{display:block;font-size:1.35rem}.metric span{display:block;color:var(--mute);font-size:.85rem}.pill{display:inline-block;padding:4px 10px;margin:4px 5px 0 0;border-radius:15px;background:#e9eeff;color:#304b9b;font-size:.83rem}details{border-top:1px solid var(--line);padding:12px 0}summary{cursor:pointer;font-weight:700}.rows{max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:9px}.line{padding:9px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}.line:last-child{border:0}.line strong{font-size:.9rem}.line small{color:var(--mute);display:block}.tag{background:#e9eeff;border-radius:7px;padding:3px 8px;font-size:.8rem}.line.red{background:var(--red)}.line.yellow{background:var(--yellow)}.line.blue{background:#eff5ff}.line.green{background:var(--green)}[hidden]{display:none!important}footer{color:var(--mute);font-size:.8rem;text-align:center;margin:25px 0}#loading{font-weight:600;color:#354c84}.warning{background:#fff7de;padding:10px;border-radius:8px;font-size:.85rem}
@@ -10,9 +10,9 @@
 </style>
 </head>
 <body><main>
-<header><h1>IEC V5.0 — Web TEST</h1><div class="sub">M4 · Supabase PostgreSQL · TEST-K01 · chỉ đọc, không nộp bài</div></header>
+<header><h1>IEC V5.0 — Web TEST</h1><div class="sub">M5-H · PostgreSQL · Đọc dữ liệu TEST-K01 + nộp thử trên lớp M5-H-TEST</div></header>
 <section class="panel" id="loginPanel"><h2>Đăng nhập tài khoản TEST</h2>
-<p class="warning">Trang kiểm thử độc lập. Không dùng tài khoản sinh viên thật. Mật khẩu, access token và publishable key chỉ giữ trong bộ nhớ trang, không lưu trên trình duyệt hoặc gửi đến nơi khác ngoài Supabase TEST.</p>
+<p class="warning">Trang kiểm thử độc lập. Chỉ sử dụng tài khoản TEST. Phần CA SÁNG chỉ ghi vào lớp M5-H-TEST, không ghi TEST-K01. Không dùng tài khoản sinh viên thật. Mật khẩu, access token và publishable key chỉ giữ trong bộ nhớ trang, không lưu trên trình duyệt hoặc gửi đến nơi khác ngoài Supabase TEST.</p>
 <form id="loginForm"><div class="form">
 <div class="wide"><label for="baseUrl">Supabase Project URL</label><input id="baseUrl" autocomplete="url" value="https://zibvzpokgfsrdxrrfhyc.supabase.co" required></div>
 <div class="wide"><label for="key">Publishable key (sb_publishable_...)</label><input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="Dán publishable key tại đây" required></div>
@@ -26,12 +26,22 @@
 <section class="panel"><h2>1. THÔNG TIN</h2><div id="bootstrapView" class="sub">Đang tải...</div></section>
 <section class="panel"><h2>2. DANH SÁCH TỪ</h2><div id="vocabMeta" class="sub">Đang tải...</div><div class="rows" id="vocabularyView"></div></section>
 <section class="panel"><h2>3. KẾT QUẢ</h2><div id="resultMeta" class="sub">Đang tải...</div><div id="resultsView"></div></section>
+<section class="panel" id="morningPanel"><h2>4. CA SÁNG — NỘP THỬ M5-H</h2>
+<p class="warning">Chỉ dùng lớp <b>M5-H-TEST</b> riêng (cần chạy SQL 012 tạo lớp trước). Đây không phải màn thi chính thức. Đề được tải riêng, <b>không gửi đáp án chuẩn về trình duyệt</b>. Nếu gửi gặp lỗi mạng, giữ nguyên mã yêu cầu và nhấn Gửi lại.</p>
+<div class="actions"><button class="secondary" id="getQuestionsBtn" type="button">Tải đề CA SÁNG TEST</button></div>
+<div id="morningStatus" class="status" role="status">Chưa tải đề.</div>
+<form id="morningForm" hidden><div id="morningQuestions"></div>
+<div class="actions"><button id="submitMorningBtn" type="submit">Nộp CA SÁNG TEST</button></div></form>
+<div id="retryArea" hidden><p class="warning">Yêu cầu trước có thể đã được ghi vào server. Không thay đổi câu trả lời hoặc tạo mã nộp khác.</p><button class="secondary" id="retryMorningBtn" type="button">Gửi lại CHÍNH XÁC yêu cầu cũ</button></div>
+<div id="morningResult" class="status" hidden></div></section>
 <section class="panel"><h2>Nhật ký đo</h2><div id="log" class="status" role="status">Chưa chạy.</div><div class="sub">Đây là thời gian phản hồi của từng API trên một thiết bị/mạng; không phải P95 hoặc đo tải 100 sinh viên.</div></section>
-</section><footer>IEC V5.0 M4 · Chỉ dùng để xác minh API đọc; không thay thế Frontend V4.1 · Không đăng lên repository IEC-V4.</footer>
+</section><footer>IEC V5.0 M5-H · Chỉ dùng trên IEC-V5-TEST và IEC-V5-TEST GitHub · Không thay thế Frontend V4.1 · Không đăng lên repository IEC-V4.</footer>
 </main>
 <script>
 'use strict';
 let session=null;
+let morningSnapshot=null;
+let pendingMorning=null;
 const $=id=>document.getElementById(id);
 const elt=(name,text,cls)=>{const e=document.createElement(name);if(text!==undefined)e.textContent=String(text);if(cls)e.className=cls;return e;};
 const val=x=>x==null||x===''?'—':String(x);
@@ -72,8 +82,72 @@ $('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginBt
  const key=$('key').value.trim();if(!key.startsWith('sb_publishable_'))throw new Error('Chỉ dùng sb_publishable_, không dùng secret key.');
  const response=await apiFetch(base+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':key,'Content-Type':'application/json'},body:JSON.stringify({email:$('email').value.trim(),password:$('password').value})});
  if(!response.data.access_token)throw new Error('Không nhận access_token từ Supabase Auth.');
- session={base,key,token:response.data.access_token};$('password').value='';$('key').value='';$('loginPanel').hidden=true;$('app').hidden=false;await refresh();
+ session={base,key,token:response.data.access_token,email:$('email').value.trim().toLowerCase()};$('password').value='';$('key').value='';$('loginPanel').hidden=true;$('app').hidden=false;resetMorningView();if(loadSavedPending()){$('retryArea').hidden=false;m5hStatus('Có yêu cầu nộp chưa xác nhận. Nhấn Gửi lại CHÍNH XÁC yêu cầu cũ.');}await refresh();
  }catch(err){message('Không thể đăng nhập: '+err.message,true);}finally{$('loginBtn').disabled=false;}});
+// M5-H Web test: no credential, token, or password is written to storage.
+// Only an unacknowledged (requestId + answers) is held temporarily in sessionStorage for safe retries.
+const pendingKey=()=>session?'iec-m5h-pending-v1:'+session.base+':'+session.email:'';
+function m5hStatus(txt,error=false){$('morningStatus').textContent=txt;$('morningStatus').className='status '+(error?'error':'');}
+function resetMorningView(){morningSnapshot=null;pendingMorning=null;$('morningQuestions').replaceChildren();$('morningForm').hidden=true;$('retryArea').hidden=true;$('morningResult').hidden=true;m5hStatus('Chưa tải đề.');}
+function loadSavedPending(){if(!session)return null;
+ try{const raw=sessionStorage.getItem(pendingKey());if(!raw)return null;
+  const payload=JSON.parse(raw);
+  if(payload?.classId!=='M5-H-TEST'||payload?.runId!=='M5H-RUN-ONE'||
+    !/^[a-f0-9-]{36}$/i.test(payload.requestId)||!Array.isArray(payload.answers))return null;
+  return payload;
+ }catch{return null;}}
+function persistPending(payload){sessionStorage.setItem(pendingKey(),JSON.stringify(payload));pendingMorning=payload;}
+function forgetPending(){if(session)sessionStorage.removeItem(pendingKey());pendingMorning=null;}
+async function m5hApi(method,body){if(!session)throw new Error('Cần đăng nhập');
+ const url=new URL(session.base+'/functions/v1/iec-v5-submit');
+ if(method==='GET')url.searchParams.set('api','morning-questions');
+ return apiFetch(url.toString(),{method,headers:{...authHeaders(),...(body?{'Content-Type':'application/json'}:{})},
+  ...(body?{body:JSON.stringify(body)}:{})});}
+async function loadMorningQuestions(){if(!session)return;
+ const btn=$('getQuestionsBtn');btn.disabled=true;
+ try{
+  const prior=loadSavedPending();if(prior){pendingMorning=prior;$('morningForm').hidden=true;
+    $('retryArea').hidden=false;m5hStatus('Còn yêu cầu nộp chưa xác nhận. Hãy gửi lại cùng mã trước khi tải đề khác.');return;}
+  m5hStatus('Đang lấy đề TEST...');const {data,elapsed}=await m5hApi('GET');
+  if(data.classId!=='M5-H-TEST'||data.runId!=='M5H-RUN-ONE')throw new Error('Sai phạm vi lớp thử');
+  morningSnapshot=data;$('retryArea').hidden=true;$('morningQuestions').replaceChildren();
+  if(!data.eligible){$('morningForm').hidden=true;
+    m5hStatus('Chưa được nộp: '+String(data.reason||'UNKNOWN')+' · Đã dùng '+data.attempts.used+'/'+data.attempts.max+' lượt.');return;}
+  for(let i=0;i<data.questions.length;i++){
+   const q=data.questions[i],row=elt('div',undefined,'line'),part=elt('div');part.style.width='100%';
+   const label=elt('label',(i+1)+'. '+q.vietnamese);label.htmlFor='m5h-q-'+i;
+   const field=elt('input');field.type='text';field.id='m5h-q-'+i;field.maxLength=500;
+   field.autocomplete='off';field.dataset.contentId=q.contentId;field.placeholder='Gõ câu trả lời tiếng Anh';
+   part.append(label,field);row.append(part);$('morningQuestions').append(row);
+  }
+  $('morningForm').hidden=false;m5hStatus('Đã lấy '+data.questions.length+' câu TEST trong '+fmtMs(elapsed)+' · Đã dùng '+data.attempts.used+'/'+data.attempts.max+' lượt.');
+ }catch(e){$('morningForm').hidden=true;m5hStatus('Lỗi tải đề: '+e.message,true);}finally{btn.disabled=false;}}
+async function sendMorning(payload){const submit=$('submitMorningBtn'),retry=$('retryMorningBtn');submit.disabled=true;retry.disabled=true;
+ $('morningForm').hidden=true;$('retryArea').hidden=false;
+ m5hStatus('Đang nộp... giữ nguyên trang, không gửi yêu cầu mới.');
+ try{const {data,elapsed}=await m5hApi('POST',payload);
+  forgetPending();$('retryArea').hidden=true;$('morningResult').hidden=false;
+  $('morningResult').textContent='NỘP THÀNH CÔNG · '+fmtMs(elapsed)+' · Đúng '+val(data.pass)+'/'+val(data.total)+
+   ' · Cần sửa: '+val(data.repairNeeded)+' · Trùng yêu cầu cũ: '+(data.duplicate?'CÓ':'KHÔNG');
+  $('morningResult').className='status success';m5hStatus('Đã nhận xác nhận từ PostgreSQL.');
+  $('getQuestionsBtn').disabled=false;
+ }catch(e){m5hStatus('Chưa có xác nhận: '+e.message+'. Dùng nút GỬI LẠI cùng yêu cầu; không tạo mã mới.',true);
+   $('retryArea').hidden=false;
+ }finally{submit.disabled=false;retry.disabled=false;}}
+$('getQuestionsBtn').addEventListener('click',loadMorningQuestions);
+$('morningForm').addEventListener('submit',e=>{
+ e.preventDefault();if(!morningSnapshot?.eligible||pendingMorning)return;
+ const inputs=[...$('morningQuestions').querySelectorAll('input[data-content-id]')];
+ if(inputs.length!==morningSnapshot.questions.length)return m5hStatus('Số câu hỏi không khớp; tải lại đề.',true);
+ const answers=inputs.map(x=>({contentId:x.dataset.contentId,answer:x.value.trim()}));
+ const blank=answers.filter(x=>!x.answer).length;
+ if(!window.confirm('Nộp '+answers.length+' câu CA SÁNG trên M5-H-TEST? '+(blank?'Có '+blank+' câu chưa trả lời sẽ bị tính SAI.':'')))return;
+ if(!crypto.randomUUID){m5hStatus('Trình duyệt không hỗ trợ crypto.randomUUID.',true);return;}
+ const payload={classId:'M5-H-TEST',runId:'M5H-RUN-ONE',requestId:crypto.randomUUID(),answers};
+ try{persistPending(payload);}catch(e){m5hStatus('Không lưu được yêu cầu để gửi lại. Chưa nộp: '+e.message,true);return;}
+ sendMorning(payload);
+});
+$('retryMorningBtn').addEventListener('click',()=>{const saved=loadSavedPending();if(!saved)return m5hStatus('Không tìm thấy yêu cầu cũ để gửi lại.',true);sendMorning(saved);});
 $('refreshBtn').addEventListener('click',refresh);
-$('logoutBtn').addEventListener('click',()=>{session=null;$('app').hidden=true;$('loginPanel').hidden=false;$('password').value='';$('key').value='';message('Đã kết thúc phiên trên trang thử nghiệm. Không lưu token vào trình duyệt.',false);});
+$('logoutBtn').addEventListener('click',()=>{session=null;$('app').hidden=true;$('loginPanel').hidden=false;$('password').value='';$('key').value='';resetMorningView();message('Đã kết thúc phiên trên trang thử nghiệm. Không lưu token vào trình duyệt.',false);});
 </script></body></html>
