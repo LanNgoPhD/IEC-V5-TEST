@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><title>IEC V5.0 – M4 Test</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--bg:#f4f6fb;--ink:#17233c;--mute:#66738a;--line:#dfe5ef;--primary:#315ac7;--blue:#dbeafe;--red:#fff2f2;--green:#eefcf3;--yellow:#fff7de}
+*{box-sizing:border-box}body{background:var(--bg);color:var(--ink);margin:0}main{max-width:1040px;margin:auto;padding:20px}h1{font-size:1.55rem;margin:.2em 0}.sub{color:var(--mute);font-size:.9rem}.panel{background:white;border:1px solid var(--line);padding:18px;border-radius:14px;margin:14px 0;box-shadow:0 3px 20px #17233c08}label{font-size:.85rem;font-weight:650;display:block;margin-bottom:5px}input{font:inherit;width:100%;padding:12px;border:1px solid #cbd4e0;border-radius:9px;min-height:43px}input:focus{outline:2px solid #9bb6ff}button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 18px;background:var(--primary);color:white;font-weight:700;min-height:43px}button:disabled{opacity:.55;cursor:wait}button.secondary{color:var(--primary);background:#eaf0ff}.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.wide{grid-column:1/-1}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.status{padding:10px 12px;background:#f4f7ff;border-radius:9px;white-space:pre-wrap;word-break:break-word}.error{background:var(--red);color:#9d1f27}.success{background:var(--green);color:#17643b}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.metric{background:#f8fafe;border:1px solid var(--line);border-radius:10px;padding:12px}.metric b{display:block;font-size:1.35rem}.metric span{display:block;color:var(--mute);font-size:.85rem}.pill{display:inline-block;padding:4px 10px;margin:4px 5px 0 0;border-radius:15px;background:#e9eeff;color:#304b9b;font-size:.83rem}details{border-top:1px solid var(--line);padding:12px 0}summary{cursor:pointer;font-weight:700}.rows{max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:9px}.line{padding:9px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}.line:last-child{border:0}.line strong{font-size:.9rem}.line small{color:var(--mute);display:block}.tag{background:#e9eeff;border-radius:7px;padding:3px 8px;font-size:.8rem}.line.red{background:var(--red)}.line.yellow{background:var(--yellow)}.line.blue{background:#eff5ff}.line.green{background:var(--green)}[hidden]{display:none!important}footer{color:var(--mute);font-size:.8rem;text-align:center;margin:25px 0}#loading{font-weight:600;color:#354c84}.warning{background:#fff7de;padding:10px;border-radius:8px;font-size:.85rem}
+@media(max-width:660px){main{padding:12px}.form,.cards{grid-template-columns:1fr}h1{font-size:1.3rem}}
+</style>
+</head>
+<body><main>
+<header><h1>IEC V5.0 — Web TEST</h1><div class="sub">M4 · Supabase PostgreSQL · TEST-K01 · chỉ đọc, không nộp bài</div></header>
+<section class="panel" id="loginPanel"><h2>Đăng nhập tài khoản TEST</h2>
+<p class="warning">Trang kiểm thử độc lập. Không dùng tài khoản sinh viên thật. Mật khẩu, access token và publishable key chỉ giữ trong bộ nhớ trang, không lưu trên trình duyệt hoặc gửi đến nơi khác ngoài Supabase TEST.</p>
+<form id="loginForm"><div class="form">
+<div class="wide"><label for="baseUrl">Supabase Project URL</label><input id="baseUrl" autocomplete="url" value="https://zibvzpokgfsrdxrrfhyc.supabase.co" required></div>
+<div class="wide"><label for="key">Publishable key (sb_publishable_...)</label><input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="Dán publishable key tại đây" required></div>
+<div><label for="email">Email đăng nhập TEST</label><input id="email" type="email" autocomplete="username" required></div>
+<div><label for="password">Mật khẩu TEST</label><input id="password" type="password" autocomplete="current-password" required></div>
+</div><div class="actions"><button type="submit" id="loginBtn">Đăng nhập và tải dữ liệu</button></div></form>
+<div id="loginMsg" class="status" role="status" hidden></div></section>
+<section id="app" hidden>
+<div class="panel"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center"><div><h2 id="studentTitle">Thông tin sinh viên</h2><div id="runTitle" class="sub"></div></div><div class="actions"><button class="secondary" id="refreshBtn">Làm mới cả 3 mục</button><button class="secondary" id="logoutBtn">Thoát</button></div></div>
+<div class="cards" id="timeCards"><div class="metric"><b id="tBoot">—</b><span>Thông tin</span></div><div class="metric"><b id="tVocabulary">—</b><span>Từ vựng</span></div><div class="metric"><b id="tResults">—</b><span>Kết quả</span></div></div><div id="loading" aria-live="polite" style="margin-top:12px"></div></div>
+<section class="panel"><h2>1. THÔNG TIN</h2><div id="bootstrapView" class="sub">Đang tải...</div></section>
+<section class="panel"><h2>2. DANH SÁCH TỪ</h2><div id="vocabMeta" class="sub">Đang tải...</div><div class="rows" id="vocabularyView"></div></section>
+<section class="panel"><h2>3. KẾT QUẢ</h2><div id="resultMeta" class="sub">Đang tải...</div><div id="resultsView"></div></section>
+<section class="panel"><h2>Nhật ký đo</h2><div id="log" class="status" role="status">Chưa chạy.</div><div class="sub">Đây là thời gian phản hồi của từng API trên một thiết bị/mạng; không phải P95 hoặc đo tải 100 sinh viên.</div></section>
+</section><footer>IEC V5.0 M4 · Chỉ dùng để xác minh API đọc; không thay thế Frontend V4.1 · Không đăng lên repository IEC-V4.</footer>
+</main>
+<script>
+'use strict';
+let session=null;
+const $=id=>document.getElementById(id);
+const elt=(name,text,cls)=>{const e=document.createElement(name);if(text!==undefined)e.textContent=String(text);if(cls)e.className=cls;return e;};
+const val=x=>x==null||x===''?'—':String(x);
+const count=x=>Array.isArray(x)?x.length:0;
+const fmtMs=ms=>(Math.round(ms)/1000).toFixed(2)+' s';
+function message(text,isError){$('loginMsg').textContent=text;$('loginMsg').hidden=false;$('loginMsg').className='status '+(isError?'error':'success');}
+function print(line){$('log').textContent+=($('log').textContent==='Chưa chạy.'?'':'\n')+line;}
+async function apiFetch(url,options={}){const start=performance.now();let response;
+ try{response=await fetch(url,{cache:'no-store',...options});}catch(_){throw new Error('Không kết nối được API. Kiểm tra mạng hoặc CORS/origin GitHub Pages.');}
+ const elapsed=performance.now()-start;let json;try{json=await response.json();}catch(_){throw new Error('API không trả JSON hợp lệ (HTTP '+response.status+').');}
+ if(!response.ok||json.ok===false)throw new Error(String(json.error||json.msg||'HTTP '+response.status));
+ return {data:json,elapsed};}
+function authHeaders(){return {'apikey':session.key,'Authorization':'Bearer '+session.token};}
+async function loadApi(endpoint,runId){const url=new URL(session.base+'/functions/v1/iec-v5');url.searchParams.set('api',endpoint);url.searchParams.set('class','TEST-K01');if(runId)url.searchParams.set('run',runId);return apiFetch(url.toString(),{headers:authHeaders()});}
+function renderBootstrap(d){$('studentTitle').textContent='THÔNG TIN: '+val(d.student?.full_name||d.student?.student_id);
+ const r=d.run||{};$('runTitle').textContent='Lớp '+val(d.classId)+' · Ngày '+val(r.program_day)+' · RUN '+val(r.run_id);
+ const box=$('bootstrapView');box.replaceChildren();const items=[['Sinh viên',d.student?.student_id],['Ngày học',r.program_day],['Trạng thái ca',r.status],['Giờ mở FINAL',r.final_open],['Hạn bắt đầu FINAL',r.final_deadline],['Ngày chương trình',r.calendar_date],['Lượt CA SÁNG',d.attempts?.morning],['Lượt FINAL',d.attempts?.final],['TA có video chờ xét',d.reviewWaitingReady]];
+ for(const [name,value] of items){box.append(elt('span',name+': '+val(value),'pill'));}
+ const c=d.counts||{};const wrap=elt('div',undefined,'cards');wrap.style.marginTop='14px';for(const color of ['RED','YELLOW','GREEN','BLUE']){const card=elt('div',undefined,'metric');card.append(elt('b',val(c[color])));card.append(elt('span',color));wrap.append(card);}box.append(wrap);
+ }
+function renderVocabulary(d){const words=Array.isArray(d.vocabulary)?d.vocabulary:[];$('vocabMeta').textContent='Bài phân công: '+words.length+' từ · RUN: '+val(d.run?.run_id)+' · Dữ liệu dùng cho luyện tập, không phải đề thi.';
+ const panel=$('vocabularyView');panel.replaceChildren();if(!words.length){panel.append(elt('div','Không có từ được phân công trong RUN này.','line'));return;}
+ for(let i=0;i<words.length;i++){const a=words[i],c=a.content||{};const row=elt('div',undefined,'line');const left=elt('div');left.append(elt('strong',(i+1)+'. '+val(c.vietnamese)));left.append(elt('small',val(c.english)+' · '+val(c.ipa)));row.append(left);row.append(elt('span',val(a.finalStatus||a.drillStatus||a.morningResult),'tag'));panel.append(row);}}
+function renderResults(d){const days=Array.isArray(d.days)?d.days:[];const reviews=Array.isArray(d.reviews)?d.reviews:[];$('resultMeta').textContent=days.length+' ngày có tổng hợp · '+reviews.length+' kết quả TA hoàn tất.';
+ const p=$('resultsView');p.replaceChildren();const cnt=elt('div',undefined,'cards');for(const color of ['RED','YELLOW','GREEN','BLUE']){const card=elt('div',undefined,'metric');card.append(elt('b',val(d.counts?.[color])));card.append(elt('span',color));cnt.append(card);}p.append(cnt);
+ const rows=elt('div',undefined,'rows');rows.style.marginTop='12px';for(const day of days){const r=elt('div',undefined,'line');const left=elt('div');left.append(elt('strong','Ngày '+val(day.program_day)+' · '+val(day.run_id)));left.append(elt('small','Sáng: '+val(day.morning_status)+' · Giữa: '+val(day.drill_status)+' · Cuối: '+val(day.final_status)));r.append(left);r.append(elt('span','BLUE: '+val(day.blue_count)+' / GREEN: '+val(day.green_count),'tag'));rows.append(r);}if(!days.length)rows.append(elt('div','Chưa có kết quả theo ngày.','line'));p.append(rows);
+ }
+async function refresh(){if(!session)return;const refreshBtn=$('refreshBtn');refreshBtn.disabled=true;$('loading').textContent='Đang tải Thông tin...';$('log').textContent='Chưa chạy.';$('tBoot').textContent='—';$('tVocabulary').textContent='—';$('tResults').textContent='—';
+ try{const bootstrap=await loadApi('bootstrap');renderBootstrap(bootstrap.data);$('tBoot').textContent=fmtMs(bootstrap.elapsed);print('PASS BOOTSTRAP | '+Math.round(bootstrap.elapsed)+' ms');$('loading').textContent='Đang tải Từ vựng và Kết quả...';
+ const run=bootstrap.data.run?.run_id;
+ const [vocab,result]=await Promise.allSettled([run?loadApi('vocabulary',run):Promise.reject(new Error('RUN_NOT_FOUND')),loadApi('results')]);
+ if(vocab.status==='fulfilled'){renderVocabulary(vocab.value.data);$('tVocabulary').textContent=fmtMs(vocab.value.elapsed);print('PASS VOCABULARY | '+Math.round(vocab.value.elapsed)+' ms');}else{$('vocabMeta').textContent='Không tải được: '+vocab.reason.message;print('FAIL VOCABULARY | '+vocab.reason.message);}
+ if(result.status==='fulfilled'){renderResults(result.value.data);$('tResults').textContent=fmtMs(result.value.elapsed);print('PASS RESULTS | '+Math.round(result.value.elapsed)+' ms');}else{$('resultMeta').textContent='Không tải được: '+result.reason.message;print('FAIL RESULTS | '+result.reason.message);}
+ $('loading').textContent='Đã hoàn tất lượt tải.';
+ }catch(e){$('loading').textContent='LỖI: '+e.message;print('FAIL BOOTSTRAP | '+e.message);}finally{refreshBtn.disabled=false;}}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginBtn').disabled=true;message('Đang đăng nhập...',false);
+ try{const base=$('baseUrl').value.trim().replace(/\/+$/,'');if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(base))throw new Error('Project URL không đúng dạng https://xxx.supabase.co');
+ const key=$('key').value.trim();if(!key.startsWith('sb_publishable_'))throw new Error('Chỉ dùng sb_publishable_, không dùng secret key.');
+ const response=await apiFetch(base+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':key,'Content-Type':'application/json'},body:JSON.stringify({email:$('email').value.trim(),password:$('password').value})});
+ if(!response.data.access_token)throw new Error('Không nhận access_token từ Supabase Auth.');
+ session={base,key,token:response.data.access_token};$('password').value='';$('key').value='';$('loginPanel').hidden=true;$('app').hidden=false;await refresh();
+ }catch(err){message('Không thể đăng nhập: '+err.message,true);}finally{$('loginBtn').disabled=false;}});
+$('refreshBtn').addEventListener('click',refresh);
+$('logoutBtn').addEventListener('click',()=>{session=null;$('app').hidden=true;$('loginPanel').hidden=false;$('password').value='';$('key').value='';message('Đã kết thúc phiên trên trang thử nghiệm. Không lưu token vào trình duyệt.',false);});
+</script></body></html>
